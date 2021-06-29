@@ -3,6 +3,7 @@ const Controller = require('egg').Controller;
 
 class PostsController extends Controller {
     async index () {
+    
         this.ctx.body = 'RESTful index'
     }
     async new () {

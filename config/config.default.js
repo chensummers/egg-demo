@@ -32,6 +32,7 @@ module.exports = appInfo => {
   };
   //前端模板编译html
   config.view = {
+    defaultViewEngine: 'ejs',
     mapping: { '.html': 'ejs' } //左边写成.html后缀，会自动渲染.html文件
   };
 

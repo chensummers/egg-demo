@@ -7,7 +7,9 @@
 module.exports = app => {
   const { router, controller, middleware } = app;
   
-  router.get('/diary/list', controller.diary.list);
+  router.get('/', controller.home.index);
+  // router.get('/diary/list', controller.diary.list);
+
   router.get('/diary/list', 'diary.list');
   router.post('/diary/add', controller.diary.add);
   router.post('/diary/update', controller.diary.update);
