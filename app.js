@@ -1,5 +1,5 @@
 module.exports = app => {
-    // 启动agent ddsd
+    // 启动agent 
     app.messenger.on('start_action', data => {
         app.logger.info(`start agent runtime by ${data}`);
     });
