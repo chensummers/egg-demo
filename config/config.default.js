@@ -43,15 +43,20 @@ module.exports = appInfo => {
   };
   config.mysql = {
     // 单数据库信息配置
+    //  mysql -utest -hlocalhost -ptest
+    //  mysql -u root -pchenyou
+
     client: {
       // host
       host: 'localhost',
       // 端口号
       port: '3306',
       // 用户名
-      user: 'root',
+      // user: 'root',
+      user: 'test',
       // 密码
-      password: 'chenyou123',
+      // password: 'chenyou',
+      password: 'test',
       // 数据库名
       database: 'test1',
     },
