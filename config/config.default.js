@@ -52,11 +52,11 @@ module.exports = appInfo => {
       // 端口号
       port: '3306',
       // 用户名
-      // user: 'root',
-      user: 'test',
+      user: 'root',
+      // user: 'test',
       // 密码
-      // password: 'chenyou',
-      password: 'test',
+      password: 'chenyou',
+      // password: 'test',
       // 数据库名
       database: 'test1',
     },
@@ -65,6 +65,13 @@ module.exports = appInfo => {
     // 是否加载到 agent 上，默认关闭
     agent: false,
   };
+
+  // 加密鉴权
+  config.jwt = {
+    secret: 'chy@egg%demo'
+  };
+
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',
@@ -74,5 +81,6 @@ module.exports = appInfo => {
     ...config,
     ...userConfig,
   };
+  
 };
 

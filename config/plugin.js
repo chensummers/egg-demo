@@ -6,14 +6,17 @@ module.exports = {
   // static: {
   //   enable: true,
   // }
+  // cors
   cors:{
     enable: true,
     package:'egg-cors'
   },
+  // 模版编译
   ejs:{
     enable: true,
     package: 'egg-view-ejs'
   },
+  // 数据库
   mysql:{
     enable: true,
     package: 'egg-mysql'
@@ -22,5 +25,10 @@ module.exports = {
   validate:{
     enable: true,
     package: 'egg-validate',
+  },
+  // 加密鉴权
+  jwt:{
+    enable: true,
+    package: "egg-jwt"
   }
 };

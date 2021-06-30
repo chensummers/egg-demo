@@ -9,7 +9,9 @@ module.exports = app => {
   
   router.get('/', controller.home.index);
   // router.get('/diary/list', controller.diary.list);
-
+  // user
+  router.post('/user/register', 'user.register');
+  // diary
   router.get('/diary/list', 'diary.list');
   router.post('/diary/add', controller.diary.add);
   router.post('/diary/update', controller.diary.update);
