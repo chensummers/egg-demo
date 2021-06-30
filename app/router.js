@@ -11,6 +11,11 @@ module.exports = app => {
   // router.get('/diary/list', controller.diary.list);
   // user
   router.post('/user/register', 'user.register');
+  router.post('/user/login', 'user.login');
+  router.post('/user/list', 'user.list');
+  router.get('/user/:id', 'user.getUserById');
+  router.put('/user/:id', 'user.update');
+  router.delete('/user/:id', 'user.delete');
   // diary
   router.get('/diary/list', 'diary.list');
   router.post('/diary/add', controller.diary.add);
