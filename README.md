@@ -31,3 +31,7 @@ $ npm stop
 
 
 [egg]: https://eggjs.org
+
+### user privileges
+--- 1 admin
+--- 0 normal

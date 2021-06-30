@@ -8,10 +8,11 @@ module.exports = app => {
   const { router, controller, middleware } = app;
   
   router.get('/', controller.home.index);
-  // router.get('/diary/list', controller.diary.list);
+  // login
+  router.post('/register', 'login.register');
+  router.post('/login', 'login.login');
+  router.post('/loginout', 'login.loginOut');
   // user
-  router.post('/user/register', 'user.register');
-  router.post('/user/login', 'user.login');
   router.post('/user/list', 'user.list');
   router.get('/user/:id', 'user.getUserById');
   router.put('/user/:id', 'user.update');
