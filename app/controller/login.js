@@ -1,18 +1,12 @@
 // /app/controller/user.js
 'use strict';
 
+const {getToken,checkToken} = require('../../utils/tools.js');
 const Controller = require('egg').Controller;
 
 class LoginController extends Controller {
-    // 生成token
-  async getToken(obj) {
-    return this.app.jwt.sign(obj, this.app.config.jwt.secret);
-  }
-  //验证token
-  async checkToken(token) {
-    return this.app.jwt.verify(token, this.app.config.jwt.secret)
-  }
-  async register() {
+  
+    async register() {
     const { ctx } = this
     const { username, password } = ctx.request.body
     //参数验证
@@ -29,11 +23,12 @@ class LoginController extends Controller {
         success: false,
         msg: '用户注册信息不对'
       }
+      return;
     }
 
     // 用户是否存在
     console.log('/user.js [37]--1', await ctx.service.user.findOne({ username }));
-    if ((await ctx.service.user.findOne({ username })).length > 0) {
+    if ((await ctx.service.user.findOne({ username }))) {
       ctx.body = {
         status: 50001,
         success: false,
@@ -55,12 +50,11 @@ class LoginController extends Controller {
         success: false,
         msg: '注册失败'
       }
-      // return ctx.error('', '创立用户失败')
     } else {
       let user = await ctx.service.user.findOne({ username })
       ctx.body = {
         status: 200,
-        data: { ...user[0] },
+        data: { ...user,userid:user.id},
         success: true,
         msg: '注册成功'
       }
@@ -73,7 +67,7 @@ class LoginController extends Controller {
     // 验证用户是否存在
     let result = await ctx.service.user.findOne({ username });
 
-    if (result.length === 0) {
+    if (!result) {
       ctx.body = {
         status: 50001,
         success: false,
@@ -83,7 +77,7 @@ class LoginController extends Controller {
     }
 
     // 校验明码是否正确
-    if (result[0].password != password) {
+    if (result.password != password) {
       ctx.body = {
         status: 50001,
         success: false,
@@ -91,14 +85,14 @@ class LoginController extends Controller {
       }
       return;
     }
-
+    
+    let {id} = result;
     // 生成token
-    let token = await this.getToken({ username, password });
+    let token = await getToken(this.app,{ id });
 
-    // 退出session/cookie/缓存中
     ctx.session.token = token;
-    let _token = await this.checkToken(token)
-    console.log('/user.js [116]--1',_token);
+    let _token = await checkToken(this.app,token)
+    console.log('/user.js [116]--1',result,_token);
     ctx.body = {
       status: 200,
       data: { token },

@@ -46,7 +46,7 @@ class UserService extends Service {
       const result = await app.mysql.select('user', {
         where: params,
       });
-      return result;
+      return result[0];
     } catch (error) {
       console.log(error);
       return null;
