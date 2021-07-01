@@ -6,7 +6,8 @@ const Controller = require('egg').Controller;
 // 大驼峰
 class DiaryController extends Controller {
   async list() {
-    const { ctx } = this;
+    const { ctx, app} = this;
+    const {userid} = app;
     const result = await ctx.service.diary.list();
     if (result) {
       ctx.body = {

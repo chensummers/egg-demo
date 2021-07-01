@@ -15,7 +15,9 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1624587491281_3650';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = [
+    
+  ];
 
   config.security = {
     csrf: {
@@ -25,7 +27,7 @@ module.exports = appInfo => {
     domainWhiteList: ['*'], // 配置白名单
   };
   config.cors = {
-    // origin: '*', //允许所有跨域访问，注释掉则允许上面 白名单 访问
+    origin: 'http://127.0.0.1:3000', //允许所有跨域访问，注释掉则允许上面 白名单 访问
     credentials: true, // 允许 Cookie 跨域
     allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
   };

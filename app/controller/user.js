@@ -1,12 +1,12 @@
 // /app/controller/user.js
 'use strict';
-
 const Controller = require('egg').Controller;
 
 // 大驼峰
 class UserController extends Controller {
   async list() {
     const { ctx } = this;
+    console.log('/user.js [9]--1',ctx);
     const result = await ctx.service.user.list();
     if (result) {
       ctx.body = {
@@ -67,6 +67,33 @@ class UserController extends Controller {
     }
   }
 
+  async getUserInfo() {
+    const {ctx,app} = this;
+    const {userid:id} = app;
+    if (!id) {
+      ctx.body = {
+        status: 50001,
+        success: false,
+        msg: 'id 不能为空'
+      }
+      return;
+    }
+    const result = await ctx.service.user.findOne({ id });
+    if (result) {
+      ctx.body = {
+        status: 200,
+        data: result,
+        success: true,
+        msg:'success'
+      };
+    } else {
+      ctx.body = {
+        status: 500001,
+        errMsg: '获取失败',
+      };
+    }
+  }
+
   async getUserById() {
     const { ctx } = this;
     const id = ctx.params.id;
@@ -79,10 +106,10 @@ class UserController extends Controller {
       return;
     }
     const result = await ctx.service.user.findOne({ id });
-    if (result[0]) {
+    if (result) {
       ctx.body = {
         status: 200,
-        data: result[0],
+        data: result,
       };
     } else {
       ctx.body = {
@@ -91,9 +118,9 @@ class UserController extends Controller {
       };
     }
   }
+
   async delete() {
     const { ctx } = this;
-    console.log('ctx.params--delete', ctx.params);
 
     if (await ctx.service.user.deleteById(ctx.params.id)) {
       ctx.body = {

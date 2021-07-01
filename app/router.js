@@ -14,15 +14,16 @@ module.exports = app => {
   router.post('/loginout', 'login.loginOut');
   // user
   router.post('/user/list', 'user.list');
-  router.get('/user/:id', 'user.getUserById');
+  router.get('/user/get', middleware.checkToken(), 'user.getUserInfo');
+  router.get('/user/:id', 'user.getUserById'); //通配路由写在后面
   router.put('/user/:id', 'user.update');
   router.delete('/user/:id', 'user.delete');
   // diary
-  router.get('/diary/list', 'diary.list');
-  router.post('/diary/add', controller.diary.add);
-  router.post('/diary/update', controller.diary.update);
-  router.get('/diary/detail/:id', controller.diary.getDiaryById);
-  router.delete('/diary/delete/:id', controller.diary.delete);
+  router.get('/diary/list', middleware.checkToken(), 'diary.list');
+  router.post('/diary/add', middleware.checkToken(), controller.diary.add);
+  router.post('/diary/update', middleware.checkToken(), controller.diary.update);
+  router.get('/diary/detail/:id', middleware.checkToken(), controller.diary.getDiaryById);
+  router.delete('/diary/delete/:id', middleware.checkToken(), controller.diary.delete);
 
   // test
   app.router.get('/search',middleware.uppercase(), controller.search.index);

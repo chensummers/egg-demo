@@ -62,11 +62,12 @@ class LoginController extends Controller {
 
   }
   async login() {
-    const { ctx } = this;
+    const { ctx,app } = this;
     let { username, password } = ctx.request.body
     // 验证用户是否存在
+    
     let result = await ctx.service.user.findOne({ username });
-
+    console.log('/login.js [68]--1',result,username);
     if (!result) {
       ctx.body = {
         status: 50001,
@@ -85,21 +86,19 @@ class LoginController extends Controller {
       }
       return;
     }
-    
+
     let {id} = result;
     // 生成token
-    let token = await getToken(this.app,{ id });
-
+    let token = await getToken(app,{ id });
     ctx.session.token = token;
-    let _token = await checkToken(this.app,token)
-    console.log('/user.js [116]--1',result,_token);
+    console.log('/login.js [94]--1',ctx.session.token);
+    // let _token = await checkToken(app,token)
     ctx.body = {
       status: 200,
       data: { token },
       msg: 'login success'
     }
   }
-
   async loginOut() {
     const { ctx } = this;
     ctx.session.token = null;
