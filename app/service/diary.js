@@ -3,10 +3,12 @@
 const Service = require('egg').Service;
 
 class DiaryService extends Service {
-  async list() {
+  async list(params) {
     const { app } = this;
     try {
-      const result = await app.mysql.select('diary');
+      const result = await app.mysql.select('diary',{
+        where:params
+      });
       return result;
     } catch (error) {
       console.log(error);
@@ -35,15 +37,12 @@ class DiaryService extends Service {
   }
   async diaryById(id) {
     const { app } = this;
-    if (!id) {
-      console.log('id不能为空');
-      return null;
-    }
+    
     try {
       const result = await app.mysql.select('diary', {
-        where: { id },
+        where: {id},
       });
-      return result;
+      return result[0];
     } catch (error) {
       console.log(error);
       return null;
