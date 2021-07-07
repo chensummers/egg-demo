@@ -1,14 +1,20 @@
+
 const {checkToken} = require('../../utils/tools.js');
 
 module.exports = () => {
     return async (ctx, next) => {
         // console.log('/checkToken.js [4]-1',ctx.session,ctx.session.token,ctx.request.header.token);
         try{
-            if(ctx.session.token ===ctx.request.header.token) {
-                const {id} = await checkToken(ctx.app,ctx.request.header.token)
-                ctx.app.userid = id
+            const {privilege} = await checkToken(ctx.app,ctx.session.token)
+            if(privilege===0){
                 await next();
+            }else{
+                ctx.body={
+                    status:50003,
+                    msg:'没权限'
+                }
             }
+            
         }catch(err) {
             ctx.body={
                 status:50002,

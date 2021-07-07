@@ -43,7 +43,6 @@ class LoginController extends Controller {
       create_time: new Date()
     }
     let user = await ctx.service.user.create(params)
-    console.log('/user.js [54]--1', user);
     if (!user) {
       ctx.body = {
         status: 50001,
@@ -87,10 +86,12 @@ class LoginController extends Controller {
       return;
     }
 
-    let {id} = result;
+    let {id,privilege} = result;
     // 生成token
-    let token = await getToken(app,{ id });
+    let token = await getToken(app,{id,privilege});
+    console.log('/login.js [91]--1',token);
     ctx.session.token = token;
+    
     console.log('/login.js [94]--1',ctx.session.token);
     // let _token = await checkToken(app,token)
     ctx.body = {

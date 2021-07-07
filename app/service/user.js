@@ -30,7 +30,7 @@ class UserService extends Service {
     try {
       await app.mysql.update('user', params);
       const user = await this.findOne({id:params.id})
-      return user&&user[0];
+      return user;
     } catch (error) {
       console.log(error);
       return null;

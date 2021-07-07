@@ -16,40 +16,65 @@ class UserController extends Controller {
     } else {
       ctx.body = {
         status: 500,
-        errMsg: '获取失败',
+        msg: '获取失败',
       };
     }
   }
   async add() {
-    const { ctx } = this;
-    const params = {
-      ...ctx.request.body,
+    const { ctx } = this
+    const { username, password } = ctx.request.body
+    //参数验证
+    ctx.validate({
+      username: { type: 'string', required: true, desc: '用户名', range: { min: 5, max: 10, } },
+      password: { type: 'string', required: true, desc: "明码" },
+    });
+
+    console.log('register----err', ctx.paramErrors);
+    // 校验失败返回
+    if (ctx.paramErrors) {
+      ctx.body = {
+        status: 50001,
+        success: false,
+        msg: '用户注册信息不对'
+      }
+      return;
+    }
+
+    // 用户是否存在
+    console.log('/user.js [37]--1', await ctx.service.user.findOne({ username }));
+    if ((await ctx.service.user.findOne({ username }))) {
+      ctx.body = {
+        status: 50001,
+        success: false,
+        msg: '用户已注册'
+      }
+      return;
+    }
+    // 插入用户数据
+    let params = {
+      username,
+      password,
       create_time: new Date()
-    };
-    const result = await ctx.service.user.add(params);
-    if (result) {
+    }
+    let user = await ctx.service.user.create(params)
+    if (!user) {
+      ctx.body = {
+        status: 50001,
+        success: false,
+        msg: '添加失败'
+      }
+    } else {
+      let user = await ctx.service.user.findOne({ username })
       ctx.body = {
         status: 200,
-        data: result,
-      };
-    } else {
-      ctx.body = {
-        status: 500,
-        errMsg: '添加失败',
-      };
+        data: { ...user,userid:user.id},
+      }
     }
   }
   async update() {
     const { ctx } = this;
-    const { id } = ctx.params;
-    if (!id) {
-      ctx.body = {
-        status: 500,
-        errMsg: 'id 不能为空',
-      };
-    }
+    delete ctx.request.body.create_time;
     const params = {
-      id: Number(id),
       ...ctx.request.body,
       update_time: new Date()
     };
@@ -62,50 +87,30 @@ class UserController extends Controller {
     } else {
       ctx.body = {
         status: 500,
-        errMsg: '更新失败',
+        msg: '更新失败',
       };
     }
   }
 
   async getUserInfo() {
-    const {ctx,app} = this;
-    const {userid:id} = app;
-    if (!id) {
-      ctx.body = {
-        status: 50001,
-        success: false,
-        msg: 'id 不能为空'
-      }
-      return;
-    }
-    const result = await ctx.service.user.findOne({ id });
-    if (result) {
-      ctx.body = {
-        status: 200,
-        data: result,
-        success: true,
-        msg:'success'
-      };
-    } else {
-      ctx.body = {
-        status: 500001,
-        errMsg: '获取失败',
-      };
-    }
+    const {app} = this;
+    const {userid} = app;
+    console.log('/user.js [72]--1',userid);
+    await this.getUserById(userid)
   }
 
-  async getUserById() {
+  async getUserById(id) {
     const { ctx } = this;
-    const id = ctx.params.id;
-    if (!id) {
+    const _id = ctx.params.id||id;
+    console.log('/user.js [79]--1',_id);
+    if (!_id) {
       ctx.body = {
         status: 50001,
-        success: false,
         msg: 'id 不能为空'
       }
       return;
     }
-    const result = await ctx.service.user.findOne({ id });
+    const result = await ctx.service.user.findOne({ id:_id });
     if (result) {
       ctx.body = {
         status: 200,
@@ -114,7 +119,7 @@ class UserController extends Controller {
     } else {
       ctx.body = {
         status: 500001,
-        errMsg: '获取失败',
+        msg: '获取失败',
       };
     }
   }
@@ -130,7 +135,7 @@ class UserController extends Controller {
     } else {
       ctx.body = {
         status: 500,
-        errMsg: '获取失败',
+        msg: '获取失败',
       };
     }
   }

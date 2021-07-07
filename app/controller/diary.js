@@ -7,6 +7,7 @@ const Controller = require('egg').Controller;
 class DiaryController extends Controller {
   async list() {
     const { ctx, app} = this;
+    console.log('/diary.js [8]--1',ctx.get('user-agent'));
     const {userid} = app;
     const result = await ctx.service.diary.list({userid});
     if (result) {
@@ -17,7 +18,7 @@ class DiaryController extends Controller {
     } else {
       ctx.body = {
         status: 50001,
-        errMsg: '获取失败',
+        msg: '获取失败',
       };
     }
   }
@@ -34,13 +35,11 @@ class DiaryController extends Controller {
       ctx.body = {
         status: 200,
         data: null,
-        success:true,
-        msg:'success'
       };
     } else {
       ctx.body = {
         status: 50001,
-        errMsg: '添加失败',
+        msg: '添加失败',
       };
     }
   }
@@ -60,7 +59,7 @@ class DiaryController extends Controller {
     } else {
       ctx.body = {
         status: 50001,
-        errMsg: '编辑失败',
+        msg: '编辑失败',
       };
     }
   }
@@ -71,7 +70,7 @@ class DiaryController extends Controller {
     if (!id) {
       ctx.body = {
         status: 50001,
-        errMsg: 'id 不能为空',
+        msg: 'id 不能为空',
       };
       return;
     }
@@ -81,13 +80,11 @@ class DiaryController extends Controller {
       ctx.body = {
         status: 200,
         data: result,
-        success: true,
-        msg:'success'
       };
     } else {
       ctx.body = {
         status: 50001,
-        errMsg: '获取失败',
+        msg: '获取失败',
       };
     }
   }
@@ -99,13 +96,11 @@ class DiaryController extends Controller {
       ctx.body = {
         status: 200,
         data: null,
-        success: true,
-        msg:'success'
       };
     } else {
       ctx.body = {
         status: 50001,
-        errMsg: '删除失败',
+        msg: '删除失败',
       };
     }
   }  
